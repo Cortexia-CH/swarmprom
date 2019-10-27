@@ -4,7 +4,7 @@ networks:
   net:
     driver: overlay
     attachable: true
-    
+
 configs:
   dockerd_config:
     file: ./dockerd-exporter/Caddyfile
@@ -53,6 +53,7 @@ services:
         - "traefik.http.routers.grafana.entrypoints=websecure"
         - "traefik.http.routers.grafana.tls.certresolver=cloudflare"
         - "traefik.http.routers.grafana.rule=Host(`grafana.${DOMAIN}`)"
+        - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
   alertmanager:
     deploy:
@@ -72,6 +73,7 @@ services:
         - "traefik.http.routers.alertmanager.entrypoints=websecure"
         - "traefik.http.routers.alertmanager.tls.certresolver=cloudflare"
         - "traefik.http.routers.alertmanager.rule=Host(`alertmanager.${DOMAIN}`)"
+        - "traefik.http.services.alertmanager.loadbalancer.server.port=9093"
 
   unsee:
     deploy:
@@ -83,6 +85,7 @@ services:
         - "traefik.http.routers.unsee.entrypoints=websecure"
         - "traefik.http.routers.unsee.tls.certresolver=cloudflare"
         - "traefik.http.routers.unsee.rule=Host(`unsee.${DOMAIN}`)"
+        - "traefik.http.services.unsee.loadbalancer.server.port=8080"
 
   node-exporter:
     deploy:
@@ -111,6 +114,7 @@ services:
         - "traefik.http.routers.prometheus.entrypoints=websecure"
         - "traefik.http.routers.prometheus.tls.certresolver=cloudflare"
         - "traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN}`)"
+        - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
     configs:
       - source: node_rules
         target: /etc/prometheus/swarm_node.rules.yml
