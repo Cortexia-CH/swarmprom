@@ -70,10 +70,12 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}"
+        - "traefik.http.middlewares.prom-basic-auth.basicauth.users=${ADMIN_USER}:${HASHED_PASSWORD}"
         - "traefik.http.routers.alertmanager.entrypoints=websecure"
         - "traefik.http.routers.alertmanager.tls.certresolver=cloudflare"
         - "traefik.http.routers.alertmanager.rule=Host(`alertmanager.${DOMAIN}`)"
         - "traefik.http.services.alertmanager.loadbalancer.server.port=9093"
+        - "traefik.http.routers.alertmanager.middlewares=prom-basic-auth"
 
   unsee:
     deploy:
@@ -82,10 +84,12 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}"
+        - "traefik.http.middlewares.prom-basic-auth.basicauth.users=${ADMIN_USER}:${HASHED_PASSWORD}"
         - "traefik.http.routers.unsee.entrypoints=websecure"
         - "traefik.http.routers.unsee.tls.certresolver=cloudflare"
         - "traefik.http.routers.unsee.rule=Host(`unsee.${DOMAIN}`)"
         - "traefik.http.services.unsee.loadbalancer.server.port=8080"
+        - "traefik.http.routers.unsee.middlewares=prom-basic-auth"
 
   node-exporter:
     deploy:
@@ -111,10 +115,12 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}"
+        - "traefik.http.middlewares.prom-basic-auth.basicauth.users=${ADMIN_USER}:${HASHED_PASSWORD}"
         - "traefik.http.routers.prometheus.entrypoints=websecure"
         - "traefik.http.routers.prometheus.tls.certresolver=cloudflare"
         - "traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN}`)"
         - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+        - "traefik.http.routers.prometheus.middlewares=prom-basic-auth"
     configs:
       - source: node_rules
         target: /etc/prometheus/swarm_node.rules.yml
