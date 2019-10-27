@@ -20,6 +20,7 @@ deploy-prom: check-env
 		-f docker-compose.yml \
 		-f docker-compose.deploy.yml \
 	config > docker-stack.yml
+	docker stack deploy -c docker-stack.yml $(SWARMPROM_STACKNAME)
 
 
 ###
